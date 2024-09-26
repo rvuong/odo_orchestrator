@@ -2,7 +2,12 @@
 
 ## 1.0.0 (2024-09-26)
 
+* Setup hexagonal architecture;
+* Feature: create an Audio stream, given a text and language;
+* Feature: save the Audio and return the url of the MP3 file;
+* Feature: save the QR Code in a PNG file and return the url as an attribute of the Audio;
 
-### Bug Fixes
+### Yet to be done
 
-* Add NodeJS in the Release Please workflow ([7ddb54e](https://github.com/rvuong/odo_orchestrator/commit/7ddb54e7c2211cd25e842a5b93936130ca893c10))
+* Unit Tests;
+* App token for security purpose;
