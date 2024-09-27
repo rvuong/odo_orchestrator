@@ -1,4 +1,5 @@
 use crate::adapters::aws_config::AwsConfig;
+use crate::api::app_config::AppConfig;
 use crate::api::routes::{configure_routes, AppState};
 use actix_web::{web, App, HttpServer};
 use log::info;
@@ -14,11 +15,13 @@ async fn main() -> std::io::Result<()> {
     info!("Starting ODO Orchestrator API...");
 
     let aws_config = AwsConfig::new();
+    let app_config = AppConfig::new();
 
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(AppState {
                 aws_config: aws_config.clone(),
+                app_config: app_config.clone(),
             }))
             .configure(configure_routes)
     })

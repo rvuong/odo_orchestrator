@@ -2,20 +2,25 @@ use crate::adapters::aws_config::AwsConfig;
 use crate::adapters::aws_polly_adapter::AwsPollyAdapter;
 use crate::adapters::aws_repository::AwsRepository;
 use crate::adapters::silverlining_adapter::SilverliningAdapter;
+use crate::api::app_config::AppConfig;
 use crate::domain::audio::AudioRequest;
 use crate::domain::audio_service::AudioService;
 use actix_web::{web, HttpRequest, HttpResponse, Responder};
-use log::debug;
 
 #[derive(Debug)]
 pub struct AppState {
     pub aws_config: AwsConfig,
+    pub app_config: AppConfig,
 }
 
-pub async fn healthcheck_handler() -> impl Responder {
-    debug!("healthcheck_handler()");
+pub async fn healthcheck_handler(data: web::Data<AppState>, req: HttpRequest) -> impl Responder {
+    let is_request_valid = data.app_config.is_api_key_valid(&req);
 
-    HttpResponse::Ok().body("Healthy")
+    if is_request_valid {
+        HttpResponse::Ok().body("Healthy")
+    } else {
+        HttpResponse::Unauthorized().body("Unauthorized")
+    }
 }
 
 fn is_qr_code_expected(req: HttpRequest) -> bool {
@@ -34,6 +39,10 @@ pub async fn create_audio_handler(
     audio_request: web::Json<AudioRequest>,
     req: HttpRequest,
 ) -> impl Responder {
+    if !data.app_config.is_api_key_valid(&req) {
+        return HttpResponse::Unauthorized().body("Unauthorized");
+    }
+
     // Get audio stream from text (tts_service)
     // Save audio MP3 to S3 (audio_repository)
     // Get QR Code url from audio MP3 url (audio_service)
