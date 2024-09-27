@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/rvuong/odo_orchestrator/compare/v1.0.0...v1.1.0) (2024-09-27)
+
+
+### Features
+
+* add an API_KEY requirement for security purpose ([6599782](https://github.com/rvuong/odo_orchestrator/commit/659978283295927741e261b833174d0c51746db5))
+
 ## 1.0.0 (2024-09-26)
 
 * Setup hexagonal architecture;
